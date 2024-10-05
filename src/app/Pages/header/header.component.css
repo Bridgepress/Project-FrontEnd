@@ -1,0 +1,4 @@
+.form-inline input, .form-inline button {
+    display: inline-block;
+    margin-right: 10px;
+  }

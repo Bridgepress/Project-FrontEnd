@@ -1,0 +1,41 @@
+<div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="border p-4 rounded shadow-sm bg-light form-container">
+      <form [formGroup]="registerForm" (ngSubmit)="registerForm.valid && register()" autocomplete="off">
+        <div class="form-group">
+          <label for="exampleInputUsername1">User name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="exampleInputUsername1"
+            placeholder="Enter username"
+            formControlName="userName"
+            [ngClass]="{'is-invalid': registerForm.get('userName')?.touched && registerForm.get('userName')?.invalid}"
+          />
+          <div *ngIf="registerForm.get('userName')?.touched && registerForm.get('userName')?.invalid" class="invalid-feedback">
+            <small *ngIf="registerForm.get('userName')?.hasError('required')">Username is required.</small>
+          </div>
+        </div>
+      
+        <div class="form-group">
+          <label for="exampleInputPassword1">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            id="exampleInputPassword1"
+            placeholder="Password"
+            formControlName="password"
+            [ngClass]="{'is-invalid': registerForm.get('password')?.touched && registerForm.get('password')?.invalid}"
+          />
+          <div *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.invalid" class="invalid-feedback">
+            <small *ngIf="registerForm.get('password')?.hasError('required')">Password is required.</small>
+            <small *ngIf="registerForm.get('password')?.hasError('minlength')">Password must be at least 8 characters long.</small>
+            <small *ngIf="registerForm.get('password')?.hasError('maxlength')">Password cannot be more than 20 characters long.</small>
+          </div>
+        </div>
+      
+        <button type="submit" class="btn btn-primary" [disabled]="registerForm.invalid">Submit</button>
+        <button class="btn btn-secondary ml-2" (click)="cancel()" type="button">Cancel</button>
+      </form>
+    </div>
+  </div>
+  

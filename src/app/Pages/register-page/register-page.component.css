@@ -1,0 +1,9 @@
+.form-container {
+    max-width: 400px;
+    width: 100%;
+  }
+  
+  .vh-100 {
+    min-height: 100vh; 
+  }
+  
