@@ -63,8 +63,8 @@ export class CommentFormComponent {
         content: content,
         parentId: this.parentId,
         userId: this.userId,
-        image: this.selectedImage || undefined,  // Заменяем null на undefined
-        textFile: this.selectedTextFile || undefined  // Заменяем null на undefined
+        image: this.selectedImage || undefined, 
+        textFile: this.selectedTextFile || undefined  
       });
 
       this.commentForm.reset({ content: '', parentId: this.parentId });

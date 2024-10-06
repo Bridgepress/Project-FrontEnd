@@ -13,7 +13,7 @@
     <button class="btn btn-success secondButton" (click)="replyToComment()">Reply</button>
 
     <div *ngIf="comment.textFileBase64" class="download-file mt-2">
-      <a [href]="getFileDownloadUrl(comment.textFileBase64, 'file.txt')" download class="btn btn-secondary">Download File</a>
+      <button class="btn btn-secondary" (click)="getFileDownloadUrl(comment.textFileBase64, 'file.txt')">Download File</button>
     </div>
 
     <div *ngIf="replyToCommentId === comment.id">

@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 import * as fromApp from '../../store/app.reducer';
 import * as CommentsActions from '../chat/store/chat.actions';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-comment',
@@ -80,13 +81,13 @@ export class CommentComponent {
     this.imageModalUrl = null;
   }
 
-  getFileDownloadUrl(base64File: string, fileName: string): string {
+  getFileDownloadUrl(base64File: string, fileName: string): void {
     const binary = atob(base64File);
     const array = [];
     for (let i = 0; i < binary.length; i++) {
       array.push(binary.charCodeAt(i));
     }
     const blob = new Blob([new Uint8Array(array)], { type: 'application/octet-stream' });
-    return window.URL.createObjectURL(blob);
+    saveAs(blob, fileName);
   }
 }
