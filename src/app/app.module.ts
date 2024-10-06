@@ -17,6 +17,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { CommentComponent } from './Pages/comment/comment.component';
 import { CommentFormComponent } from './Pages/comment-form/comment-form.component';
 import { CommentListComponent } from './Pages/comment-list/comment-list.component';
+import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,9 @@ import { CommentListComponent } from './Pages/comment-list/comment-list.componen
     CommentFormComponent,
     CommentListComponent,
   ],
-  imports: [
+  imports: [ 
+    RecaptchaModule,
+    RecaptchaFormsModule,
     BrowserModule,
     HttpClientModule,
     FormsModule,

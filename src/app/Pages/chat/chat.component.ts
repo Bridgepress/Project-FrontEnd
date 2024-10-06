@@ -19,8 +19,11 @@ export class ChatComponent implements OnInit {
   totalItems: number = 0;
   totalPages: number = 1;
   pageSizes: number[] = [5, 10, 25];
-  sortCriteria: string = 'userName'; // По умолчанию сортировка по имени пользователя
-  sortOrder: string = 'asc'; // По умолчанию возрастание
+  sortCriteria: string = 'userName'; 
+  sortOrder: string = 'asc'; 
+  siteKey: string = '6LdAUlkqAAAAAEmYtj99fO6S_R9HZIhFvASDUu_6';
+  isCaptchaVerified: boolean = false;
+  captchaToken: string = '';
 
   constructor(private store: Store<fromApp.AppState>, private accountRequests: AccountRequests) {
     this.rootComments$ = store.select(state => ({
@@ -67,7 +70,15 @@ export class ChatComponent implements OnInit {
   }
 
   onCommentSubmitted(comment: { content: string, parentId: number | null, userId: string }) {
-    this.store.dispatch(new CommentsActions.AddComment(comment, this.page, this.pageSize, this.sortCriteria, this.sortOrder));
+    if (this.captchaToken) {
+      const commentWithCaptcha = {
+        ...comment,
+        captchaToken: this.captchaToken
+      };
+      this.store.dispatch(new CommentsActions.AddComment(commentWithCaptcha, this.page, this.pageSize, this.sortCriteria, this.sortOrder,  this.captchaToken));
+    } else {
+      alert("Please complete the CAPTCHA verification.");
+    }
   }
 
   paginationNumbers(): number[] {
@@ -84,7 +95,16 @@ export class ChatComponent implements OnInit {
   }
 
   onSortChange() {
-    // Перезагрузка комментариев с текущими параметрами сортировки
     this.loadComments();
+  }
+
+  onCaptchaResolved(token: string | null) {
+    if (token) {
+      this.captchaToken = token;
+      this.isCaptchaVerified = true; 
+    } else {
+      this.captchaToken = '';
+      this.isCaptchaVerified = false; 
+    }
   }
 }

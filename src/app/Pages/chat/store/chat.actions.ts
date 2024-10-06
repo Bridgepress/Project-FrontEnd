@@ -48,7 +48,8 @@ export class AddComment {
         public page: number,
         public pageSize: number,
         public sortCriteria: string,
-        public sortOrder: string
+        public sortOrder: string,
+        public captchaToken: string
     ) {}
 }
 
