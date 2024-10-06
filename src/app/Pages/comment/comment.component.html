@@ -1,24 +1,42 @@
 <div class="card mb-3">
-    <div class="card-body">
-      <h5 class="card-title">{{ comment.user.userName }}</h5>
-      <p>{{comment.user.email}}</p>
-      <div class="comment-content" [innerHTML]="getSafeHtml(comment.content)"></div>
-  
-      <button class="btn btn-primary" (click)="toggleReplies()">
-        {{ showReplies ? 'Hide Replies' : 'Show Replies' }}
-      </button>
-      <button class="btn btn-success" (click)="replyToComment()">Reply</button>
-  
-      <div *ngIf="replyToCommentId === comment.id">
+  <div class="card-body">
+    <h5 class="card-title">{{ comment.user.userName }}</h5>
+    <p>{{comment.user.email}}</p>
+    <div class="comment-content" [innerHTML]="getSafeHtml(comment.content)"></div>
+    <div *ngIf="comment.imageBase64" class="image-thumbnail">
+      <img [src]="'data:image/png;base64,' + comment.imageBase64" alt="Image" (click)="openImageModal(comment.imageBase64)" />
+    </div>
+
+    <button class="btn btn-primary" style="margin-right: 5px;" (click)="toggleReplies()">
+      {{ showReplies ? 'Hide Replies' : 'Show Replies' }}
+    </button>
+    <button class="btn btn-success secondButton" (click)="replyToComment()">Reply</button>
+
+    <div *ngIf="comment.textFileBase64" class="download-file mt-2">
+      <a [href]="getFileDownloadUrl(comment.textFileBase64, 'file.txt')" download class="btn btn-secondary">Download File</a>
+    </div>
+
+    <div *ngIf="replyToCommentId === comment.id">
+      <div class="editor-container">
         <quill-editor [(ngModel)]="replyContent" [modules]="quillModules"></quill-editor>
+      </div>
+      <div class="btn-container">
         <button class="btn btn-primary mt-2" (click)="submitReply()">Submit Reply</button>
       </div>
-  
-      <div *ngIf="showReplies && expandedComments[comment.id]?.length">
-        <div *ngFor="let reply of expandedComments[comment.id]" class="ml-4">
-          <app-comment [comment]="reply" [user]="user" (replySubmitted)="onReplySubmitted($event)"></app-comment>
-        </div>
+    </div>
+    
+
+    <div *ngIf="showReplies && expandedComments[comment.id]?.length">
+      <div *ngFor="let reply of expandedComments[comment.id]" class="ml-4">
+        <app-comment [comment]="reply" [user]="user" (replySubmitted)="onReplySubmitted($event)"></app-comment>
       </div>
     </div>
   </div>
-  
+</div>
+
+<div *ngIf="isImageModalOpen" class="image-modal" (click)="closeImageModal()">
+<div class="image-modal-content" (click)="$event.stopPropagation()">
+  <span class="close-modal" (click)="closeImageModal()">&times;</span>
+  <img [src]="'data:image/png;base64,' + imageModalUrl" alt="Image" class="modal-image" />
+</div>
+</div>

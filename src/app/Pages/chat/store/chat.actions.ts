@@ -43,8 +43,8 @@ export class LoadCommentTreeFailure {
 
 export class AddComment {
     readonly type = ADD_COMMENT;
-    constructor(public comment: { 
-        content: string, parentId: number | null, userId: string },
+    constructor(
+        public formData: FormData,  
         public page: number,
         public pageSize: number,
         public sortCriteria: string,

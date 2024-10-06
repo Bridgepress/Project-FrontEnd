@@ -19,6 +19,8 @@ export class CommentComponent {
   replyToCommentId: number | null = null;
   expandedComments: { [key: number]: Comment[] } = {};
   replyContent: string = ''; 
+  isImageModalOpen = false;
+  imageModalUrl: string | null = null;
 
   quillModules = {
     toolbar: [
@@ -66,5 +68,25 @@ export class CommentComponent {
       this.replySubmitted.emit({ ...reply, userId: this.user.id });
       this.replyToCommentId = null;
     }
+  }
+
+  openImageModal(imageBase64: string) {
+    this.isImageModalOpen = true;
+    this.imageModalUrl = imageBase64;
+  }
+
+  closeImageModal() {
+    this.isImageModalOpen = false;
+    this.imageModalUrl = null;
+  }
+
+  getFileDownloadUrl(base64File: string, fileName: string): string {
+    const binary = atob(base64File);
+    const array = [];
+    for (let i = 0; i < binary.length; i++) {
+      array.push(binary.charCodeAt(i));
+    }
+    const blob = new Blob([new Uint8Array(array)], { type: 'application/octet-stream' });
+    return window.URL.createObjectURL(blob);
   }
 }

@@ -52,16 +52,16 @@ export class ChatEffects {
         this.actions$.pipe(
             ofType(CommentsActions.ADD_COMMENT),
             switchMap((action: CommentsActions.AddComment) => {
-                return this.http.post<Comment>(`${environment(apiEnvKey)}/api/Comment/AddComment`, action.comment)
+                return this.http.post<Comment>(`${environment(apiEnvKey)}/api/Comment/AddComment`, action.formData)
                     .pipe(
                         map(comment => new CommentsActions.AddCommentSuccess(comment)),
                         switchMap((comment) => {
                             return [new CommentsActions.LoadRootComments(action.page, action.pageSize, action.sortCriteria, action.sortOrder)];
                         }),
                         catchError(error => {
-                            this.toastr.error('Failed to load comment tree', error.message);
-                            return of(new CommentsActions.AddCommentFailure(error.message))
-                        })                       
+                            this.toastr.error('Failed to add comment', error.message);
+                            return of(new CommentsActions.AddCommentFailure(error.message));
+                        })
                     );
             })
         )

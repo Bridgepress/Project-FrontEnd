@@ -10,6 +10,8 @@ export class Comment {
             userName: string,
             email: string
         },
+        public imageBase64: string | null,
+        public textFileBase64: string | null,
         public replies?: Comment[]
     ){}
   }

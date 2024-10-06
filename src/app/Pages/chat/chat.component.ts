@@ -70,17 +70,29 @@ export class ChatComponent implements OnInit {
     this.loadComments();
   }
 
-  onCommentSubmitted(comment: { content: string, parentId: number | null, userId: string }) {
+  onCommentSubmitted(comment: { content: string, parentId: number | null, userId: string, image?: File | null, textFile?: File | null }) {
     if (this.captchaToken) {
-      const commentWithCaptcha = {
-        ...comment,
-        captchaToken: this.captchaToken
-      };
-      this.store.dispatch(new CommentsActions.AddComment(commentWithCaptcha, this.page, this.pageSize, this.sortCriteria, this.sortOrder,  this.captchaToken));
+      const formData = new FormData();
+      
+      formData.append('content', comment.content);
+      formData.append('parentId', comment.parentId ? comment.parentId.toString() : '');
+      formData.append('userId', comment.userId);
+      formData.append('captchaToken', this.captchaToken);
+  
+      if (comment.image) {
+        formData.append('image', comment.image);
+      }
+  
+      if (comment.textFile) {
+        formData.append('textFile', comment.textFile);
+      }
+
+      this.store.dispatch(new CommentsActions.AddComment(formData, this.page, this.pageSize, this.sortCriteria, this.sortOrder, this.captchaToken));
     } else {
       alert("Please complete the CAPTCHA verification.");
     }
   }
+  
 
   paginationNumbers(): number[] {
     const pages: number[] = [];

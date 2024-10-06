@@ -2,5 +2,17 @@
     <div class="form-group">
       <quill-editor formControlName="content"></quill-editor>
     </div>
-    <button type="submit" class="btn btn-success" [disabled]="commentForm.invalid">Submit</button>
+
+    <div class="form-group">
+      <label for="image">Upload Image</label>
+      <input type="file" #imageInput accept="image/jpeg, image/png, image/gif" (change)="onImageSelected($event)" class="form-control">
+    </div>
+
+    <div class="form-group">
+      <label for="textFile">Upload Text File</label>
+      <input type="file" #textFileInput accept=".txt" (change)="onTextFileSelected($event)" class="form-control">
+    </div>
+  
+    <button type="submit" class="btn btn-success" [disabled]="commentForm.invalid || isFileTooLarge || invalidFileType">Submit</button>
   </form>
+  
