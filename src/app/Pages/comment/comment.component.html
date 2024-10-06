@@ -5,7 +5,7 @@
       <button class="btn btn-primary" (click)="toggleReplies()">
         {{ showReplies ? 'Hide Replies' : 'Show Replies' }}
       </button>
-      <button class="btn btn-secondary" (click)="replyToComment()">Reply</button>
+      <button class="btn btn-success" (click)="replyToComment()">Reply</button>
       <app-comment-form *ngIf="replyToCommentId === comment.id" [parentId]="comment.id" [userId]="user?.id"
                         (commentSubmitted)="onReplySubmitted($event)">
       </app-comment-form>

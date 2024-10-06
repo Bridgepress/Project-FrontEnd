@@ -6,7 +6,7 @@
       </ul>
   
       <div *ngIf="(accountRequests.currentUser$ | async) as user"class="dropdown" dropdown>
-        <button class="btn btn-primary mr-2" (click)="logout()">Login</button>
+        <button class="btn btn-primary mr-2" (click)="logout()">Logout</button>
       </div>
   
       <form *ngIf="!(accountRequests.currentUser$ | async) as user" #loginForm="ngForm" class="form-inline d-flex align-items-center" (ngSubmit)="login()" autocomplete="off">
