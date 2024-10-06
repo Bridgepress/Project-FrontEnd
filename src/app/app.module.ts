@@ -18,6 +18,7 @@ import { CommentComponent } from './Pages/comment/comment.component';
 import { CommentFormComponent } from './Pages/comment-form/comment-form.component';
 import { CommentListComponent } from './Pages/comment-list/comment-list.component';
 import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha';
+import { QuillModule } from 'ngx-quill'
 
 @NgModule({
   declarations: [
@@ -31,6 +32,12 @@ import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha';
     CommentListComponent,
   ],
   imports: [ 
+    QuillModule.forRoot({
+      customOptions: [{
+        import: 'formats/font',
+        whitelist: ['mirza', 'roboto', 'aref', 'serif', 'sansserif', 'monospace']
+      }]
+  }),
     RecaptchaModule,
     RecaptchaFormsModule,
     BrowserModule,

@@ -23,10 +23,13 @@
     "@angular/ssr": "^18.2.3",
     "@ngrx/effects": "^18.0.2",
     "@ngrx/store": "^18.0.2",
+    "@types/quill": "^2.0.14",
     "bootstrap": "^5.3.3",
     "express": "^4.18.2",
     "ng-recaptcha": "^13.2.1",
+    "ngx-quill": "^26.0.8",
     "ngx-toastr": "^19.0.0",
+    "quill": "^2.0.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.10"

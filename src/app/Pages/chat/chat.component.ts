@@ -5,6 +5,7 @@ import * as fromApp from '../../store/app.reducer';
 import * as CommentsActions from './store/chat.actions';
 import { Store } from '@ngrx/store';
 import { AccountRequests } from '../auth/Requests/AccountRequests';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-chat',
@@ -25,7 +26,7 @@ export class ChatComponent implements OnInit {
   isCaptchaVerified: boolean = false;
   captchaToken: string = '';
 
-  constructor(private store: Store<fromApp.AppState>, private accountRequests: AccountRequests) {
+  constructor(private store: Store<fromApp.AppState>, private accountRequests: AccountRequests, private toastr: ToastrService) {
     this.rootComments$ = store.select(state => ({
       comments: state.chat.comments,
       totalItems: state.chat.totalItems

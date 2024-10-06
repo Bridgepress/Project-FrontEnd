@@ -1,6 +1,6 @@
 <form [formGroup]="commentForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
-      <textarea class="form-control" formControlName="content" placeholder="Write a comment..."></textarea>
+      <quill-editor formControlName="content"></quill-editor>
     </div>
     <button type="submit" class="btn btn-success" [disabled]="commentForm.invalid">Submit</button>
   </form>

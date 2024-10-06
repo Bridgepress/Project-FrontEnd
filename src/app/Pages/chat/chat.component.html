@@ -42,7 +42,7 @@
         </nav>
     </div>
     <div class="mt-4">
-        <re-captcha (resolved)="onCaptchaResolved($event)" [siteKey]="siteKey"></re-captcha>
+        <re-captcha (resolved)="onCaptchaResolved($event)" [siteKey]="siteKey" ></re-captcha>
         <app-comment-form *ngIf="user && isCaptchaVerified" [userId]="user?.id" (commentSubmitted)="onCommentSubmitted($event)">
         </app-comment-form>
       </div>

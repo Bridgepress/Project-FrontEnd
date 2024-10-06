@@ -11,7 +11,6 @@ export class CommentFormComponent {
   @Input() parentId: number | null = null;
   @Input() userId: string | null = null;
   @Output() commentSubmitted = new EventEmitter<{ content: string, parentId: number | null, userId: string }>();
-
   commentForm: FormGroup;
 
   constructor(private fb: FormBuilder) {

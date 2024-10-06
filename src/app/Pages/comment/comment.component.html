@@ -1,21 +1,24 @@
 <div class="card mb-3">
     <div class="card-body">
       <h5 class="card-title">{{ comment.user.userName }}</h5>
-      <p class="card-text">{{ comment.user.email }}</p>
-      <p class="card-text">{{ comment.content }}</p>
+      <p>{{comment.user.email}}</p>
+      <div class="comment-content" [innerHTML]="getSafeHtml(comment.content)"></div>
+  
       <button class="btn btn-primary" (click)="toggleReplies()">
         {{ showReplies ? 'Hide Replies' : 'Show Replies' }}
       </button>
       <button class="btn btn-success" (click)="replyToComment()">Reply</button>
-      <app-comment-form *ngIf="replyToCommentId === comment.id" [parentId]="comment.id" [userId]="user?.id"
-                        (commentSubmitted)="onReplySubmitted($event)">
-      </app-comment-form>
+  
+      <div *ngIf="replyToCommentId === comment.id">
+        <quill-editor [(ngModel)]="replyContent" [modules]="quillModules"></quill-editor>
+        <button class="btn btn-primary mt-2" (click)="submitReply()">Submit Reply</button>
+      </div>
+  
       <div *ngIf="showReplies && expandedComments[comment.id]?.length">
         <div *ngFor="let reply of expandedComments[comment.id]" class="ml-4">
-          <app-comment [comment]="reply" [user]="user"
-                       (replySubmitted)="onReplySubmitted($event)">
-          </app-comment>
+          <app-comment [comment]="reply" [user]="user" (replySubmitted)="onReplySubmitted($event)"></app-comment>
         </div>
       </div>
     </div>
   </div>
+  

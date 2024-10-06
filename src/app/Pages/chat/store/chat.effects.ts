@@ -9,10 +9,11 @@ import { HttpClient } from "@angular/common/http";
 import { Comment } from "../comment.model";
 import { Store } from "@ngrx/store";
 import * as fromApp from '../../../store/app.reducer';
+import { ToastrService } from "ngx-toastr";
 
 @Injectable()
 export class ChatEffects {
-    constructor(private http: HttpClient, private actions$: Actions, private store: Store<fromApp.AppState>) {}
+    constructor(private http: HttpClient, private actions$: Actions, private store: Store<fromApp.AppState>, private toastr: ToastrService) {}
 
     loadRootComments = createEffect(() =>
         this.actions$.pipe(
@@ -22,7 +23,10 @@ export class ChatEffects {
                     `${environment(apiEnvKey)}/api/Comment/GetRootComments?page=${action.page}&pageSize=${action.pageSize}&sortBy=${action.sortCriteria}&sortOrder=${action.sortOrder}`
                 ).pipe(
                     map(response => new CommentsActions.LoadRootCommentsSuccess(response.items, response.totalItems)),
-                    catchError(error => of(new CommentsActions.LoadRootCommentsFailure(error.message)))
+                    catchError(error => {
+                        this.toastr.error('Failed to load comments', error.message);
+                        return of(new CommentsActions.LoadRootCommentsFailure(error.message));
+                    })
                 );
             })
         )
@@ -35,7 +39,10 @@ export class ChatEffects {
                 return this.http.get<Comment[]>(`${environment(apiEnvKey)}/api/Comment/GetCommentTree/${action.commentId}`)
                     .pipe(
                         map(comments => new CommentsActions.LoadCommentTreeSuccess(action.commentId, comments)),
-                        catchError(error => of(new CommentsActions.LoadCommentTreeFailure(action.commentId, error.message)))
+                        catchError(error => {
+                            this.toastr.error('Failed to load comment tree', error.message);
+                            return of(new CommentsActions.LoadCommentTreeFailure(action.commentId, error.message));
+                        })
                     );
             })
         )
@@ -51,7 +58,10 @@ export class ChatEffects {
                         switchMap((comment) => {
                             return [new CommentsActions.LoadRootComments(action.page, action.pageSize, action.sortCriteria, action.sortOrder)];
                         }),
-                        catchError(error => of(new CommentsActions.AddCommentFailure(error.message)))
+                        catchError(error => {
+                            this.toastr.error('Failed to load comment tree', error.message);
+                            return of(new CommentsActions.AddCommentFailure(error.message))
+                        })                       
                     );
             })
         )
