@@ -13,11 +13,12 @@ export const ADD_COMMENT_FAILURE = '[Comments] Add Comment Failure';
 
 export class LoadRootComments {
     readonly type = LOAD_ROOT_COMMENTS;
+    constructor(public page: number, public pageSize: number) {}
 }
 
 export class LoadRootCommentsSuccess {
     readonly type = LOAD_ROOT_COMMENTS_SUCCESS;
-    constructor(public comments: Comment[]) {}
+    constructor(public comments: Comment[], public totalItems: number) {}
 }
 
 export class LoadRootCommentsFailure {
@@ -42,7 +43,11 @@ export class LoadCommentTreeFailure {
 
 export class AddComment {
     readonly type = ADD_COMMENT;
-    constructor(public comment: { content: string, parentId: number | null, userId: string }) {}
+    constructor(public comment: { 
+        content: string, parentId: number | null, userId: string },
+        public page: number,
+        public pageSize: number
+    ) {}
 }
 
 export class AddCommentSuccess {

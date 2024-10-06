@@ -4,6 +4,7 @@ import { Comment } from '../comment.model';
 
 export interface State {
     comments: Comment[];
+    totalItems: number;
     loading: boolean;
     error: string | null;
     expandedComments: { [key: number]: Comment[] };
@@ -11,6 +12,7 @@ export interface State {
 
 export const initialState: State = {
     comments: [],
+    totalItems: 0,
     loading: false,
     error: null,
     expandedComments: {}
@@ -28,7 +30,8 @@ export function commentReducer(state: State = initialState, action: CommentsActi
             return {
                 ...state,
                 loading: false,
-                comments: (action as CommentsActions.LoadRootCommentsSuccess).comments
+                comments: (action as CommentsActions.LoadRootCommentsSuccess).comments,
+                totalItems: (action as CommentsActions.LoadRootCommentsSuccess).totalItems
             };
         case CommentsActions.LOAD_ROOT_COMMENTS_FAILURE:
             return {

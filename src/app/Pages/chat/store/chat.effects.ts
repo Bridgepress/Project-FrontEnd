@@ -7,20 +7,23 @@ import { environment } from "../../../Requests/Options/BaseUrl";
 import { apiEnvKey } from "../../../Requests/Options/BaseUrl";
 import { HttpClient } from "@angular/common/http";
 import { Comment } from "../comment.model";
+import { Store } from "@ngrx/store";
+import * as fromApp from '../../../store/app.reducer';
 
 @Injectable()
 export class ChatEffects {
-    constructor(private http: HttpClient, private actions$: Actions) {}
+    constructor(private http: HttpClient, private actions$: Actions, private store: Store<fromApp.AppState>) {}
 
     loadRootComments = createEffect(() =>
         this.actions$.pipe(
             ofType(CommentsActions.LOAD_ROOT_COMMENTS),
-            switchMap(() => {
-                return this.http.get<Comment[]>(`${environment(apiEnvKey)}/api/Comment/GetRootComments`)
-                    .pipe(
-                        map(comments => new CommentsActions.LoadRootCommentsSuccess(comments)),
-                        catchError(error => of(new CommentsActions.LoadRootCommentsFailure(error.message)))
-                    );
+            switchMap((action: CommentsActions.LoadRootComments) => {
+                return this.http.get<{ items: Comment[], totalItems: number }>(
+                    `${environment(apiEnvKey)}/api/Comment/GetRootComments?page=${action.page}&pageSize=${action.pageSize}`
+                ).pipe(
+                    map(response => new CommentsActions.LoadRootCommentsSuccess(response.items, response.totalItems)),
+                    catchError(error => of(new CommentsActions.LoadRootCommentsFailure(error.message)))
+                );
             })
         )
     );
@@ -38,16 +41,15 @@ export class ChatEffects {
         )
     );
 
- addComment = createEffect(() =>
+    addComment = createEffect(() =>
         this.actions$.pipe(
             ofType(CommentsActions.ADD_COMMENT),
             switchMap((action: CommentsActions.AddComment) => {
                 return this.http.post<Comment>(`${environment(apiEnvKey)}/api/Comment/AddComment`, action.comment)
                     .pipe(
                         map(comment => new CommentsActions.AddCommentSuccess(comment)),
-                        // Перезагрузка комментариев после успешного добавления
                         switchMap((comment) => {
-                            return [new CommentsActions.LoadRootComments()];
+                            return [new CommentsActions.LoadRootComments(action.page, action.pageSize)];
                         }),
                         catchError(error => of(new CommentsActions.AddCommentFailure(error.message)))
                     );
