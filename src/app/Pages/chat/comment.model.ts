@@ -7,7 +7,8 @@ export class Comment {
         public parentId: number | null,
         public user: {
             id: number,
-            userName: string
+            userName: string,
+            email: string
         },
         public replies?: Comment[]
     ){}

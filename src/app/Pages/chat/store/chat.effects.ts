@@ -19,7 +19,7 @@ export class ChatEffects {
             ofType(CommentsActions.LOAD_ROOT_COMMENTS),
             switchMap((action: CommentsActions.LoadRootComments) => {
                 return this.http.get<{ items: Comment[], totalItems: number }>(
-                    `${environment(apiEnvKey)}/api/Comment/GetRootComments?page=${action.page}&pageSize=${action.pageSize}`
+                    `${environment(apiEnvKey)}/api/Comment/GetRootComments?page=${action.page}&pageSize=${action.pageSize}&sortBy=${action.sortCriteria}&sortOrder=${action.sortOrder}`
                 ).pipe(
                     map(response => new CommentsActions.LoadRootCommentsSuccess(response.items, response.totalItems)),
                     catchError(error => of(new CommentsActions.LoadRootCommentsFailure(error.message)))
@@ -49,7 +49,7 @@ export class ChatEffects {
                     .pipe(
                         map(comment => new CommentsActions.AddCommentSuccess(comment)),
                         switchMap((comment) => {
-                            return [new CommentsActions.LoadRootComments(action.page, action.pageSize)];
+                            return [new CommentsActions.LoadRootComments(action.page, action.pageSize, action.sortCriteria, action.sortOrder)];
                         }),
                         catchError(error => of(new CommentsActions.AddCommentFailure(error.message)))
                     );

@@ -13,7 +13,7 @@ export const ADD_COMMENT_FAILURE = '[Comments] Add Comment Failure';
 
 export class LoadRootComments {
     readonly type = LOAD_ROOT_COMMENTS;
-    constructor(public page: number, public pageSize: number) {}
+    constructor(public page: number, public pageSize: number, public sortCriteria: string, public sortOrder:string) {}
 }
 
 export class LoadRootCommentsSuccess {
@@ -46,7 +46,9 @@ export class AddComment {
     constructor(public comment: { 
         content: string, parentId: number | null, userId: string },
         public page: number,
-        public pageSize: number
+        public pageSize: number,
+        public sortCriteria: string,
+        public sortOrder: string
     ) {}
 }
 

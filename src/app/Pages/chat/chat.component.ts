@@ -18,7 +18,9 @@ export class ChatComponent implements OnInit {
   pageSize: number = 5;
   totalItems: number = 0;
   totalPages: number = 1;
-  pageSizes: number[] = [5, 10, 20];
+  pageSizes: number[] = [5, 10, 25];
+  sortCriteria: string = 'userName'; // По умолчанию сортировка по имени пользователя
+  sortOrder: string = 'asc'; // По умолчанию возрастание
 
   constructor(private store: Store<fromApp.AppState>, private accountRequests: AccountRequests) {
     this.rootComments$ = store.select(state => ({
@@ -35,7 +37,7 @@ export class ChatComponent implements OnInit {
   }
 
   loadComments() {
-    this.store.dispatch(new CommentsActions.LoadRootComments(this.page, this.pageSize));
+    this.store.dispatch(new CommentsActions.LoadRootComments(this.page, this.pageSize, this.sortCriteria, this.sortOrder));
     this.rootComments$.subscribe(response => {
       if (response) {
         this.totalItems = response.totalItems;
@@ -65,7 +67,7 @@ export class ChatComponent implements OnInit {
   }
 
   onCommentSubmitted(comment: { content: string, parentId: number | null, userId: string }) {
-    this.store.dispatch(new CommentsActions.AddComment(comment, this.page, this.pageSize));
+    this.store.dispatch(new CommentsActions.AddComment(comment, this.page, this.pageSize, this.sortCriteria, this.sortOrder));
   }
 
   paginationNumbers(): number[] {
@@ -78,6 +80,11 @@ export class ChatComponent implements OnInit {
 
   goToPage(pageNumber: number) {
     this.page = pageNumber;
+    this.loadComments();
+  }
+
+  onSortChange() {
+    // Перезагрузка комментариев с текущими параметрами сортировки
     this.loadComments();
   }
 }
