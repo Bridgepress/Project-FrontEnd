@@ -42,7 +42,7 @@ export class LoadCommentTreeFailure {
 
 export class AddComment {
     readonly type = ADD_COMMENT;
-    constructor(public comment: { content: string, parentId: number | null }) {}
+    constructor(public comment: { content: string, parentId: number | null, userId: string }) {}
 }
 
 export class AddCommentSuccess {

@@ -38,13 +38,17 @@ export class ChatEffects {
         )
     );
 
-    addComment = createEffect(() =>
+ addComment = createEffect(() =>
         this.actions$.pipe(
             ofType(CommentsActions.ADD_COMMENT),
             switchMap((action: CommentsActions.AddComment) => {
                 return this.http.post<Comment>(`${environment(apiEnvKey)}/api/Comment/AddComment`, action.comment)
                     .pipe(
                         map(comment => new CommentsActions.AddCommentSuccess(comment)),
+                        // Перезагрузка комментариев после успешного добавления
+                        switchMap((comment) => {
+                            return [new CommentsActions.LoadRootComments()];
+                        }),
                         catchError(error => of(new CommentsActions.AddCommentFailure(error.message)))
                     );
             })

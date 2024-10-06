@@ -8,6 +8,7 @@ export class Comment {
         public user: {
             id: number,
             userName: string
-        }
+        },
+        public replies?: Comment[]
     ){}
   }

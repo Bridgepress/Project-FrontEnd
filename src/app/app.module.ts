@@ -13,6 +13,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { AuthComponent } from './Pages/auth/auth.component';
 import { HeaderComponent } from './Pages/header/header.component';
 import { RegisterPageComponent } from './Pages/register-page/register-page.component';
+import { ToastrModule } from 'ngx-toastr';
+import { CommentComponent } from './Pages/comment/comment.component';
+import { CommentFormComponent } from './Pages/comment-form/comment-form.component';
+import { CommentListComponent } from './Pages/comment-list/comment-list.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +25,9 @@ import { RegisterPageComponent } from './Pages/register-page/register-page.compo
     AuthComponent,
     HeaderComponent,
     RegisterPageComponent,
+    CommentComponent,
+    CommentFormComponent,
+    CommentListComponent,
   ],
   imports: [
     BrowserModule,
@@ -31,6 +38,9 @@ import { RegisterPageComponent } from './Pages/register-page/register-page.compo
     EffectsModule.forRoot([ChatEffects]),
     AppRoutingModule,
     ReactiveFormsModule,
+    ToastrModule.forRoot({
+      positionClass: 'toast-bottom-right'
+    }),
   ],
   providers: [
     provideClientHydration(),

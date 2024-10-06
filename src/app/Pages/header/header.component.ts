@@ -1,7 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { AccountRequests } from '../auth/Requests/AccountRequests';
 import { User } from '../auth/user.model';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { isPlatformBrowser } from '@angular/common';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -12,11 +15,17 @@ export class HeaderComponent {
   public isLoggedIn: boolean = false;
   public isLoginError: boolean = false;
   public model: any = {}
+  userName: string | null= '';
 
-  constructor(private accountRequests : AccountRequests) {}
+  constructor(public accountRequests : AccountRequests, private toastr: ToastrService, @Inject(PLATFORM_ID) private platformId: any) {}
 
     ngOnInit(): void {
-
+      if (isPlatformBrowser(this.platformId)) {
+        if(localStorage.getItem('token') !== null) {
+          this.isLoggedIn = true;
+          this.userName = JSON.parse(localStorage.getItem('user') || '{}').userName;
+        }
+      }
     }
 
     public async login() {
@@ -29,6 +38,7 @@ export class HeaderComponent {
         },
         error: (error) => {
           this.isLoginError = true;
+          this.toastr.error('Invalid username or password');
           setTimeout(() => {
             this.isLoginError = false;
           }, 2000);
@@ -37,12 +47,7 @@ export class HeaderComponent {
     }
 
     public logout() {
-      localStorage.removeItem('user');
-      localStorage.removeItem('token');
-      localStorage.removeItem('role');
-      localStorage.removeItem('expires');
-      localStorage.removeItem('userId');
-      this.isLoggedIn = false;
+      this.accountRequests.logout();
     }
 
     private setCurrentUser(user: User) {

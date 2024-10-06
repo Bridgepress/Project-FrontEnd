@@ -3,14 +3,13 @@
       <a class="navbar-brand" routerLink='/' routerLinkActive="active">Chat</a>
   
       <ul class="navbar-nav mr-auto">
-        <!-- Other nav items can be added here -->
       </ul>
   
-      <div *ngIf="isLoggedIn" class="dropdown" dropdown>
-        <a class="dropdown-item" (click)="logout()">Logout</a>
+      <div *ngIf="(accountRequests.currentUser$ | async) as user"class="dropdown" dropdown>
+        <button class="btn btn-primary mr-2" (click)="logout()">Login</button>
       </div>
   
-      <form *ngIf="!isLoggedIn" #loginForm="ngForm" class="form-inline d-flex align-items-center" (ngSubmit)="login()" autocomplete="off">
+      <form *ngIf="!(accountRequests.currentUser$ | async) as user" #loginForm="ngForm" class="form-inline d-flex align-items-center" (ngSubmit)="login()" autocomplete="off">
         <input
           name="username"
           [(ngModel)]="model.username"
@@ -28,11 +27,6 @@
         <button class="btn btn-success mr-2" type="submit">Login</button>
         <button class="btn btn-secondary" type="button" routerLink='/register'>SignIn</button>
       </form>
-  
-      <!-- Блок для отображения ошибки логина -->
-      <div *ngIf="isLoginError" class="alert alert-danger mt-2 ml-2">
-        Invalid username or password.
-      </div>
     </div>
   </nav>
   

@@ -1,33 +1,9 @@
 <div class="container">
-    <div *ngFor="let comment of (rootComments$ | async)" class="card mb-3">
-      <div class="card-body">
-        <h5 class="card-title">{{ comment.user.userName }}</h5>
-        <p class="card-text">{{ comment.content }}</p>
-        
-        <button class="btn btn-primary" (click)="toggleComment(comment.id)">
-          {{ (expandedComments$ | async)?.[comment.id] ? 'Hide Replies' : 'Show Replies' }}
-        </button>
-        <button class="btn btn-secondary" (click)="replyToComment(comment.id)">Reply</button>
-
-        <div *ngIf="(expandedComments$ | async)?.[comment.id]" class="mt-3">
-          <div *ngFor="let childComment of (expandedComments$ | async)?.[comment.id]" class="ml-4">
-            <div class="card mb-2">
-              <div class="card-body">
-                <h6 class="card-subtitle mb-2 text-muted">{{ childComment.user.username }}</h6>
-                <p class="card-text">{{ childComment.content }}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div *ngFor="let comment of (rootComments$ | async)">
+      <app-comment [comment]="comment" [user]="user" (replySubmitted)="onCommentSubmitted($event)">
+      </app-comment>
     </div>
 
-    <form [formGroup]="commentForm" *ngIf="commentForm" (ngSubmit)="onSubmit()">
-      <div class="form-group">
-        <label for="content">Add a Comment</label>
-        <textarea id="content" class="form-control" formControlName="content"></textarea>
-      </div>
-      <button type="submit" class="btn btn-success" [disabled]="!commentForm?.valid">Submit</button>
-    </form>
+    <app-comment-form *ngIf="user" [userId]="user?.id" (commentSubmitted)="onCommentSubmitted($event)">
+    </app-comment-form>
   </div>
-  

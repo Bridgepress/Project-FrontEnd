@@ -1,0 +1,20 @@
+<div class="card mb-3">
+    <div class="card-body">
+      <h5 class="card-title">{{ comment.user.userName }}</h5>
+      <p class="card-text">{{ comment.content }}</p>
+      <button class="btn btn-primary" (click)="toggleReplies()">
+        {{ showReplies ? 'Hide Replies' : 'Show Replies' }}
+      </button>
+      <button class="btn btn-secondary" (click)="replyToComment()">Reply</button>
+      <app-comment-form *ngIf="replyToCommentId === comment.id" [parentId]="comment.id" [userId]="user?.id"
+                        (commentSubmitted)="onReplySubmitted($event)">
+      </app-comment-form>
+      <div *ngIf="showReplies && expandedComments[comment.id]?.length">
+        <div *ngFor="let reply of expandedComments[comment.id]" class="ml-4">
+          <app-comment [comment]="reply" [user]="user"
+                       (replySubmitted)="onReplySubmitted($event)">
+          </app-comment>
+        </div>
+      </div>
+    </div>
+  </div>

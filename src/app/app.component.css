@@ -9,3 +9,5 @@
     overflow-x: hidden; 
     overflow-y: auto; 
     }
+    @import 'ngx-toastr/toastr';
+    @import 'ngx-toastr/toastr-bs5-alert';
