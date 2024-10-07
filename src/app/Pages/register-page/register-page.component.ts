@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AccountRequests } from '../auth/Requests/AccountRequests';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -27,6 +27,7 @@ export class RegisterPageComponent implements OnInit {
   initializeForm() {
     this.registerForm = this.fb.group({
       userName: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
       password: [
         '',
         [Validators.required, Validators.minLength(8), Validators.maxLength(20)]
@@ -38,8 +39,9 @@ export class RegisterPageComponent implements OnInit {
     const values = { ...this.registerForm.value };
     this.accountRequests.register(values).subscribe({
       next: () => {
-        // this.toastr.success(this.translate.instant('RegistrationSuccessful'));
         this.router.navigateByUrl('');
+      },
+      error: (err) => {
       }
     });
   }

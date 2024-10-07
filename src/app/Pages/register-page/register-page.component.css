@@ -6,4 +6,10 @@
   .vh-100 {
     min-height: 100vh; 
   }
+
+  .buttonFirst {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-right: 5px;
+  }
   
