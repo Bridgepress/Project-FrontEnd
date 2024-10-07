@@ -64,8 +64,8 @@ export class ChatComponent implements OnInit {
     }
   }
 
-  onPageSizeChange(event: any) {
-    this.pageSize = +event.target.value;
+  onPageSizeChange(newPageSize: number) {
+    this.pageSize = newPageSize;
     this.page = 1;
     this.loadComments();
   }

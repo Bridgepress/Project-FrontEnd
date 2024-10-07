@@ -37,7 +37,7 @@
                 <label for="pageSize" class="mr-2 mb-0">Items per page:</label>
                 <select id="pageSize" [(ngModel)]="pageSize" class="form-control w-auto" (ngModelChange)="onPageSizeChange($event)">
                     <option *ngFor="let size of pageSizes" [value]="size">{{size}}</option>
-                </select>
+                  </select>
             </div>
         </nav>
     </div>
