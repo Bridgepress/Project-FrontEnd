@@ -1,49 +1,59 @@
 <div class="container mt-4">
-    <div class="d-flex justify-content-end align-items-center mb-3">
-        <label for="sortCriteria" class="mr-2 mb-0">Sort by:</label>
-        <select id="sortCriteria" [(ngModel)]="sortCriteria" class="form-control w-auto" (ngModelChange)="onSortChange()">
-            <option value="userName">User Name</option>
-            <option value="email">Email</option>
-        </select>
+    <div *ngIf="user; else loginMessage">
+        <!-- Сортировка и список комментариев -->
+        <div class="d-flex justify-content-end align-items-center mb-3">
+            <label for="sortCriteria" class="mr-2 mb-0">Sort by:</label>
+            <select id="sortCriteria" [(ngModel)]="sortCriteria" class="form-control w-auto" (ngModelChange)="onSortChange()">
+                <option value="userName">User Name</option>
+                <option value="email">Email</option>
+            </select>
 
-        <label for="sortOrder" class="ml-4 mr-2 mb-0" style="margin-left: 5px;">Order:</label>
-        <select id="sortOrder" [(ngModel)]="sortOrder" class="form-control w-auto" (ngModelChange)="onSortChange()">
-            <option value="asc">Ascending</option>
-            <option value="desc">Descending</option>
-        </select>
-    </div>
-
-    <div class="comment-container">
-        <div *ngFor="let comment of (rootComments$ | async)?.comments" class="mb-3 chat">
-            <app-comment [comment]="comment" [user]="user" (replySubmitted)="onCommentSubmitted($event)">
-            </app-comment>
+            <label for="sortOrder" class="ml-4 mr-2 mb-0" style="margin-left: 5px;">Order:</label>
+            <select id="sortOrder" [(ngModel)]="sortOrder" class="form-control w-auto" (ngModelChange)="onSortChange()">
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+            </select>
         </div>
-        <nav aria-label="Pagination" class="d-flex justify-content-between align-items-center mt-4">
-            <ul class="pagination mb-0">
-                <li class="page-item" [class.disabled]="page === 1">
-                    <button class="page-link" (click)="onPreviousPage()">Previous</button>
-                </li>
-    
-                <li *ngFor="let p of paginationNumbers()" class="page-item" [class.active]="p === page">
-                    <button class="page-link" (click)="goToPage(p)">{{p}}</button>
-                </li>
-    
-                <li class="page-item" [class.disabled]="page === totalPages">
-                    <button class="page-link" (click)="onNextPage()">Next</button>
-                </li>
-            </ul>
-    
-            <div class="d-flex align-items-center">
-                <label for="pageSize" class="mr-2 mb-0">Items per page:</label>
-                <select id="pageSize" [(ngModel)]="pageSize" class="form-control w-auto" (ngModelChange)="onPageSizeChange($event)">
-                    <option *ngFor="let size of pageSizes" [value]="size">{{size}}</option>
-                  </select>
+
+        <div class="comment-container">
+            <div *ngFor="let comment of (rootComments$ | async)?.comments" class="mb-3 chat">
+                <app-comment [comment]="comment" [user]="user" (replySubmitted)="onCommentSubmitted($event)">
+                </app-comment>
             </div>
-        </nav>
+            <nav aria-label="Pagination" class="d-flex justify-content-between align-items-center mt-4">
+                <ul class="pagination mb-0">
+                    <li class="page-item" [class.disabled]="page === 1">
+                        <button class="page-link" (click)="onPreviousPage()">Previous</button>
+                    </li>
+
+                    <li *ngFor="let p of paginationNumbers()" class="page-item" [class.active]="p === page">
+                        <button class="page-link" (click)="goToPage(p)">{{p}}</button>
+                    </li>
+
+                    <li class="page-item" [class.disabled]="page === totalPages">
+                        <button class="page-link" (click)="onNextPage()">Next</button>
+                    </li>
+                </ul>
+
+                <div class="d-flex align-items-center">
+                    <label for="pageSize" class="mr-2 mb-0">Items per page:</label>
+                    <select id="pageSize" [(ngModel)]="pageSize" class="form-control w-auto" (ngModelChange)="onPageSizeChange($event)">
+                        <option *ngFor="let size of pageSizes" [value]="size">{{size}}</option>
+                    </select>
+                </div>
+            </nav>
+        </div>
+ 
+        <div class="mt-4">
+            <re-captcha (resolved)="onCaptchaResolved($event)" [siteKey]="siteKey"></re-captcha>
+            <app-comment-form [userId]="user?.id" *ngIf="isCaptchaVerified" (commentSubmitted)="onCommentSubmitted($event)">
+            </app-comment-form>
+        </div>
     </div>
-    <div class="mt-4">
-        <re-captcha (resolved)="onCaptchaResolved($event)" [siteKey]="siteKey" ></re-captcha>
-        <app-comment-form *ngIf="user && isCaptchaVerified" [userId]="user?.id" (commentSubmitted)="onCommentSubmitted($event)">
-        </app-comment-form>
-      </div>
+
+    <ng-template #loginMessage>
+        <div class="alert alert-info text-center">
+            Please log in to chat.
+        </div>
+    </ng-template>
 </div>
